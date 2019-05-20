@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	log "github.com/sirupsen/logrus"
 )
@@ -12,7 +13,24 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "this is go istio api : 9527 ")
+	//fmt.Fprintf(w, "this is go istio api : 9527 ")
+	//log.Infof("istio api info : %s", req.RequestURI)
+	tr := http.Transport{DisableKeepAlives: true}
+	client := &http.Client{Transport: &tr}
+
+	resp, err := client.Get("http://127.0.0.1:7001/repo/v1/info")
+
+	if resp != nil {
+		defer resp.Body.Close()
+	}
+	checkError(err)
+
+	body, err := ioutil.ReadAll(resp.Body)
+	checkError(err)
+
+	//fmt.Println(string(body))
+
+	fmt.Fprintf(w, string(body))
 }
 
 func loggingMiddleware(next http.Handler) http.Handler {
@@ -20,4 +38,10 @@ func loggingMiddleware(next http.Handler) http.Handler {
 		log.Infof("uri: %s", req.RequestURI)
 		next.ServeHTTP(w, req)
 	})
+}
+
+func checkError(err error) {
+	if err != nil{
+		log.Fatalln(err)
+	}
 }
