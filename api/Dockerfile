@@ -20,7 +20,7 @@
 #EXPOSE 9527
 #ENTRYPOINT ["/app/api"]
 
-FROM golang
+FROM alpine:latest
 
 ENV GO111MODULE=on
 
