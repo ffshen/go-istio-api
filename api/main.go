@@ -18,7 +18,7 @@ func handler(w http.ResponseWriter, req *http.Request) {
 	tr := http.Transport{DisableKeepAlives: true}
 	client := &http.Client{Transport: &tr}
 
-	resp, err := client.Get("http://istio-api.default.svc.cluster.local:9528/repo/v1/info")
+	resp, err := client.Get("http://go-istio-repo-service/repo/v1/info")
 
 	if err != nil{
 		log.Fatalln(err)
