@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -14,22 +15,27 @@ func main() {
 func handler(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "this is go istio api : 9527 ")
 	//log.Infof("istio api info : %s", req.RequestURI)
-	//tr := http.Transport{DisableKeepAlives: true}
-	//client := &http.Client{Transport: &tr}
+	tr := http.Transport{DisableKeepAlives: true}
+	client := &http.Client{Transport: &tr}
 
-	//resp, err := client.Get("http://127.0.0.1:9528/repo/v1/info")
+	resp, err := client.Get("http://istio-api.default.svc.cluster.local:9528/repo/v1/info")
+
+	if err != nil{
+		log.Fatalln(err)
+		fmt.Fprintf(w, "err")
+	}
 	//
-	//if resp != nil {
-	//	defer resp.Body.Close()
-	//}
+	if resp != nil {
+		defer resp.Body.Close()
+	}
 	//checkError(err)
 	//
-	//body, err := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 	//checkError(err)
 	//
-	////fmt.Println(string(body))
+	//fmt.Println(string(body))
 	//
-	//fmt.Fprintf(w, string(body))
+	fmt.Fprintf(w, "repo response : " + string(body))
 }
 
 func loggingMiddleware(next http.Handler) http.Handler {
@@ -39,8 +45,9 @@ func loggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func checkError(err error) {
-	if err != nil{
-		log.Fatalln(err)
-	}
-}
+//func checkError(err error) string {
+//	if err != nil{
+//		log.Fatalln(err)
+//		return "error"
+//	}
+//}
