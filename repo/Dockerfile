@@ -20,15 +20,19 @@
 #EXPOSE 9528
 #ENTRYPOINT ["/app/repo"]
 
-FROM golang
+FROM alpine:latest
 
 ENV GO111MODULE=on
 
 WORKDIR /app
 
-COPY . .
+# COPY . .
+
+ADD repo /app
 
 #RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
 
 EXPOSE 9528
+
+
 ENTRYPOINT ["/app/repo"]
