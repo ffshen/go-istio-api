@@ -30,5 +30,5 @@ COPY . .
 
 #RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build
 
-EXPOSE 9527
+EXPOSE 9528
 ENTRYPOINT ["/app/repo"]
