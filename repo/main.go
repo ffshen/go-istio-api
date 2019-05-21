@@ -13,7 +13,7 @@ func main() {
 
 func handler(w http.ResponseWriter, req *http.Request) {
 	//fmt.Println(string(body))
-	fmt.Fprintf(w, "this is go istio repo : 9528 version : v1 ")
+	fmt.Fprintf(w, "this is go istio repo : 9528 version : v2 ")
 }
 
 func loggingMiddleware(next http.Handler) http.Handler {
